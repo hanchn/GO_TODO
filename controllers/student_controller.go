@@ -179,7 +179,8 @@ func (sc *StudentController) SearchStudents(c *gin.Context) {
 	
 	var students []models.Student
 	db := config.GetDB()
-	query := db
+	// 确保只搜索未删除的记录
+	query := db.Where("deleted_at IS NULL")
 	
 	if name != "" {
 		query = query.Where("name LIKE ?", "%"+name+"%")
