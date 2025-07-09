@@ -381,16 +381,24 @@
 
         // 删除学生
         async function deleteStudent(id) {
+            console.log('删除学生函数被调用，ID:', id);
+            
             if (!confirm('确定要删除这个学生吗？此操作不可恢复。')) {
+                console.log('用户取消删除操作');
                 return;
             }
+            
+            console.log('开始发送删除请求...');
             
             try {
                 const response = await fetch(`/api/v1/students/${id}`, {
                     method: 'DELETE'
                 });
                 
+                console.log('删除请求响应状态:', response.status);
+                
                 const data = await response.json();
+                console.log('删除请求响应数据:', data);
                 
                 if (response.ok) {
                     showAlert(data.message, 'success');
@@ -399,6 +407,7 @@
                     showAlert('删除失败: ' + (data.error || '未知错误'), 'danger');
                 }
             } catch (error) {
+                console.error('删除请求错误:', error);
                 showAlert('网络错误: ' + error.message, 'danger');
             }
         }
