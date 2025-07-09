@@ -16,7 +16,8 @@ func (sc *StudentController) GetAllStudents(c *gin.Context) {
 	var students []models.Student
 	db := config.GetDB()
 	
-	result := db.Find(&students)
+	// 确保只获取未删除的记录
+	result := db.Where("deleted_at IS NULL").Find(&students)
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Failed to fetch students",
